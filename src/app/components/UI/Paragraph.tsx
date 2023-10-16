@@ -1,7 +1,6 @@
-import React from 'react';
-import { cva } from 'class-variance-authority';
-
-type Props = {};
+import React, { HTMLAttributes, forwardRef } from 'react';
+import { VariantProps, cva } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 const paragraphVariants = cva(
   'max-w-prose text-slate-700 dark:text-slate-300 mb-2 text-center',
@@ -9,14 +8,32 @@ const paragraphVariants = cva(
     variants: {
       size: {
         default: 'text-base sm:text-lg',
-        large: '',
+        sm: 'text-sm sm:text-base',
       },
+    },
+    defaultVariants: {
+      size: 'default',
     },
   }
 );
 
-const Paragraph = (props: Props) => {
-  return <div>Paragraph</div>;
-};
+interface Props
+  extends HTMLAttributes<HTMLParagraphElement>,
+    VariantProps<typeof paragraphVariants> {}
+
+const Paragraph = forwardRef<HTMLParagraphElement, Props>(
+  ({ className, size, children, ...props }, ref) => {
+    return (
+      <p
+        ref={ref}
+        {...props}
+        className={cn(paragraphVariants({ size, className }))}>
+        {children}
+      </p>
+    );
+  }
+);
+
+Paragraph.displayName = 'Paragraph';
 
 export default Paragraph;
