@@ -6,6 +6,8 @@ import { Key } from 'lucide-react';
 import Heading from '@/ui/Heading';
 import Paragraph from '@/ui/Paragraph';
 import CopyButton from '@/components/CopyButton';
+import { Input } from '@/ui/Input';
+import Button from '@/ui/Button';
 
 interface RequestApiKeyProps {}
 
@@ -45,8 +47,17 @@ const RequestApiKey: FC<RequestApiKeyProps> = ({}) => {
               className='absolute inset-y-0 right-0 animate-in fade-in duration-300'
               valueToClipboard={apiKey}
             />
-          ) : // Todo: Create a reusable input component...
-          null}
+          ) : null}
+          <Input
+            readOnly
+            value={apiKey ?? ''}
+            placeholder='Request an API key to display it here!'
+          />
+        </div>
+        <div className='mt-3 sm:mt-0 sm:ml-4 sm:flex-shrink-0'>
+          <Button disabled={!!apiKey} isLoading={isCreating}>
+            Request Key
+          </Button>
         </div>
       </form>
     </div>
