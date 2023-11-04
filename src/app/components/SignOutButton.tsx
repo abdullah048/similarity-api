@@ -9,7 +9,7 @@ interface SignOutButtonProps {}
 const SignOutButton: FC<SignOutButtonProps> = ({}) => {
   const [isLoading, setLoading] = useState<boolean>(false);
 
-  const signOut = async () => {
+  const logout = async () => {
     setLoading(true);
     try {
       await signOut();
@@ -22,7 +22,7 @@ const SignOutButton: FC<SignOutButtonProps> = ({}) => {
   };
 
   return (
-    <Button onClick={signOut} isLoading={isLoading}>
+    <Button onClick={logout} isLoading={isLoading}>
       Sign Out
     </Button>
   );
