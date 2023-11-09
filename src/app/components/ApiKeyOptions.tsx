@@ -9,6 +9,8 @@ import {
 import Button from '@/ui/Button';
 import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { revokeApiKey, createApiKey } from '@/lib/helper';
 
 interface ApiKeyOptionsProps {
   apiKeyId: string;
@@ -18,15 +20,33 @@ interface ApiKeyOptionsProps {
 const ApiKeyOptions: FC<ApiKeyOptionsProps> = ({ apiKey, apiKeyId }) => {
   const [isCreatingNew, setIsCreatingNew] = useState<boolean>(false);
   const [isRevoking, setIsRevoking] = useState<boolean>(false);
+  const router = useRouter();
 
   const createNewApiKey = async () => {
     setIsCreatingNew(true);
-    // try {
-    //     await revokeApiKey({keyId:apiKeyId})
-    //     await
-    // } catch (error) {
+    try {
+      await revokeApiKey({ keyId: apiKeyId });
+      await createApiKey();
+      router.refresh();
+    } catch (error) {
+      toast.error('Error creating API key');
+      console.log('error', error);
+    } finally {
+      setIsCreatingNew(false);
+    }
+  };
 
-    // }
+  const revokeCurrentApiKey = async () => {
+    setIsRevoking(true);
+    try {
+      await revokeApiKey({ keyId: apiKeyId });
+      router.refresh();
+    } catch (error) {
+      toast.error('Error revoking your API key');
+      console.log('error', error);
+    } finally {
+      setIsRevoking(false);
+    }
   };
 
   return (
@@ -56,11 +76,7 @@ const ApiKeyOptions: FC<ApiKeyOptionsProps> = ({ apiKey, apiKeyId }) => {
         <DropdownMenuItem onClick={createNewApiKey}>
           Create New Key
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => {
-            navigator.clipboard.writeText(apiKey);
-            toast.success('Copied to clipboard');
-          }}>
+        <DropdownMenuItem onClick={revokeCurrentApiKey}>
           Revoke Key
         </DropdownMenuItem>
       </DropdownMenuContent>
