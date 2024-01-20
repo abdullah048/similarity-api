@@ -19,7 +19,7 @@ export default withAuth(
     const pathname = req.nextUrl.pathname; //relative path
 
     // Manage rate limiting
-    if (pathname.startsWith('/api')) {
+    if (pathname.startsWith('/api/v1')) {
       const ip = req.ip ?? '127.0.0.1';
       try {
         const { success } = await rateLimit.limit(ip);
